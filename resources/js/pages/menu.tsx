@@ -61,6 +61,12 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
         setShowModal(true);
     };
 
+    const normalizeWa = (link: string) => {
+        if (!link) return '';
+        const match = link.match(/wa\.me\/(\d+)/);
+        return match ? match[1] : link;
+    };
+
     const openEdit = (item: MenuItem) => {
         setEditingItem(item);
         setSubmitError(null);
@@ -76,7 +82,7 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
             gofood_link: (item as any).gofood_link || '',
             grabfood_link: (item as any).grabfood_link || '',
             shopeefood_link: (item as any).shopeefood_link || '',
-            whatsapp_link: (item as any).whatsapp_link || '',
+            whatsapp_link: normalizeWa((item as any).whatsapp_link || ''),
         });
         const isUpload = item.image && !item.image.startsWith('http');
         setImageMode(isUpload ? 'upload' : 'url');
@@ -118,26 +124,36 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
                 setSubmitError(msgs || 'Validation failed');
             },
         };
+        const waLink = data.whatsapp_link
+            ? (data.whatsapp_link.startsWith('http') ? data.whatsapp_link : `https://wa.me/${data.whatsapp_link.replace(/[^0-9]/g, '')}`)
+            : '';
+
+        const payload = { ...data, whatsapp_link: waLink };
+
         if (imageMode === 'upload' && data.image_file instanceof File) {
             const fd = new FormData();
-            fd.append('name', data.name);
-            fd.append('description', data.description || '');
-            fd.append('category', data.category);
-            fd.append('price', String(data.price));
-            fd.append('old_price', String(data.old_price));
-            if (data.badge) fd.append('badge', data.badge);
-            fd.append('is_active', data.is_active ? '1' : '0');
-            fd.append('gofood_link', data.gofood_link || '');
-            fd.append('grabfood_link', data.grabfood_link || '');
-            fd.append('shopeefood_link', data.shopeefood_link || '');
-            fd.append('whatsapp_link', data.whatsapp_link || '');
+            fd.append('name', payload.name);
+            fd.append('description', payload.description || '');
+            fd.append('category', payload.category);
+            fd.append('price', String(payload.price));
+            fd.append('old_price', String(payload.old_price));
+            if (payload.badge) fd.append('badge', payload.badge);
+            fd.append('is_active', payload.is_active ? '1' : '0');
+            fd.append('gofood_link', payload.gofood_link || '');
+            fd.append('grabfood_link', payload.grabfood_link || '');
+            fd.append('shopeefood_link', payload.shopeefood_link || '');
+            fd.append('whatsapp_link', payload.whatsapp_link);
             fd.append('image', '');
             fd.append('image_file', data.image_file);
             if (editingItem) fd.append('_method', 'put');
             router.post(url, fd, cb);
         } else {
             setData('image_file', null as any);
-            (editingItem ? put : post)(url, cb);
+            if (editingItem) {
+                put(`/admin/menu/${editingItem.id}`, { ...payload, whatsapp_link: waLink, _method: undefined }, cb);
+            } else {
+                post('/admin/menu', { ...payload, whatsapp_link: waLink }, cb);
+            }
         }
     };
 
@@ -344,8 +360,8 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
                                         <input type="url" value={data.shopeefood_link} onChange={e => setData('shopeefood_link', e.target.value)} placeholder="https://shopeefood.co.id/..." className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-medium text-slate-600 mb-1">💬 WhatsApp Link</label>
-                                        <input type="url" value={data.whatsapp_link} onChange={e => setData('whatsapp_link', e.target.value)} placeholder="https://wa.me/62..." className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
+                                        <label className="block text-xs font-medium text-slate-600 mb-1">💬 WhatsApp</label>
+                                        <input type="tel" value={data.whatsapp_link} onChange={e => setData('whatsapp_link', e.target.value)} placeholder="6281234567890" className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
                                     </div>
                                 </div>
                             </div>
