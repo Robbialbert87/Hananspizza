@@ -12,10 +12,10 @@ import ReviewSection from '../components/landing/ReviewSection';
 
 export default function Welcome({ menuItems = [], promos = [] }: { menuItems?: any[]; promos?: any[] }) {
     return (
-        <div className="font-['Poppins',sans-serif] text-[#333] leading-relaxed scroll-smooth" style={{ scrollPaddingTop: '80px' }}>
+        <div className="font-['Poppins',sans-serif] text-[#1B1B1B] leading-relaxed scroll-smooth" style={{ scrollPaddingTop: '80px' }}>
             <Head title="Hanan's Pizza" />
             <Navbar />
-            <HeroSection />
+            <HeroSection featuredItems={menuItems} />
             <MenuSection menuItems={menuItems} />
             <PlatformSection />
             <PromoSection promos={promos} />

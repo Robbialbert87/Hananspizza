@@ -31,27 +31,27 @@ export default function PublicOutlet() {
                                 <div style={{ height: '8px', background: 'linear-gradient(90deg, #f7a928, #e59a1f)' }}></div>
                                 <div style={{ padding: '24px' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                                        <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                            <i className="fas fa-store" style={{ fontSize: '1.1rem', color: '#fff' }}></i>
+                                        <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '1.1rem' }}>
+                                            🏪
                                         </div>
                                         <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111' }}>{outlet.name}</h3>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.9rem', color: '#666' }}>
-                                            <i className="fas fa-map-marker-alt" style={{ color: '#f7a928', marginTop: '3px', width: '16px', textAlign: 'center' }}></i>
+                                            <span style={{ color: '#f7a928', flexShrink: 0 }}>📍</span>
                                             <span>{outlet.address}</span>
                                         </div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: '#666' }}>
-                                            <i className="fas fa-phone" style={{ color: '#f7a928', width: '16px', textAlign: 'center' }}></i>
+                                            <span style={{ color: '#f7a928' }}>📞</span>
                                             <span>{outlet.phone}</span>
                                         </div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: '#666' }}>
-                                            <i className="fas fa-clock" style={{ color: '#f7a928', width: '16px', textAlign: 'center' }}></i>
+                                            <span style={{ color: '#f7a928' }}>🕒</span>
                                             <span>{outlet.hours}</span>
                                         </div>
                                     </div>
                                     <a href={outlet.map} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '16px', padding: '10px 20px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', color: '#000', fontWeight: '600', fontSize: '0.85rem', borderRadius: '10px', textDecoration: 'none' }}>
-                                        <i className="fas fa-directions"></i> Lihat di Maps
+                                        🗺️ Lihat di Maps
                                     </a>
                                 </div>
                             </div>

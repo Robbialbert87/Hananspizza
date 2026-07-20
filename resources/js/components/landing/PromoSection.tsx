@@ -1,5 +1,7 @@
 import React from 'react';
 
+interface MenuItem { id: number; name: string; }
+
 interface Promo {
     id: number;
     title: string;
@@ -8,6 +10,7 @@ interface Promo {
     is_active: boolean;
     start_date: string;
     end_date: string;
+    menu_item: MenuItem | null;
 }
 
 const promoImages: Record<string, string> = {
@@ -34,7 +37,7 @@ export default function PromoSection({ promos }: { promos: Promo[] }) {
 
                 {promos.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>
-                        <i className="fas fa-tag" style={{ fontSize: '2rem', marginBottom: '12px', display: 'block' }}></i>
+                        <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🏷️</div>
                         Belum ada promo aktif saat ini.
                     </div>
                 ) : (
@@ -44,6 +47,9 @@ export default function PromoSection({ promos }: { promos: Promo[] }) {
                                 <div className="promo-content">
                                     <span className="promo-badge">{promo.discount}</span>
                                     <h3 className="promo-title"><span>{promo.title}</span></h3>
+                                    {promo.menu_item && (
+                                        <p style={{ fontSize: '0.82rem', opacity: 0.8, marginBottom: '8px' }}>🍕 {promo.menu_item.name}</p>
+                                    )}
                                     <p className="promo-desc">{promo.description}</p>
                                     <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', marginTop: '8px' }}>
                                         {formatDate(promo.start_date)} - {formatDate(promo.end_date)}

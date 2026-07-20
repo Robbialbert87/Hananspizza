@@ -41,7 +41,7 @@ export default function PublicPromo({ promos }: { promos: Promo[] }) {
 
                     {promos.length === 0 ? (
                         <div style={{ textAlign: 'center', padding: '60px', color: '#888' }}>
-                            <i className="fas fa-tag" style={{ fontSize: '2rem', marginBottom: '12px', display: 'block' }}></i>
+                            <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🏷️</div>
                             Belum ada promo aktif saat ini.
                         </div>
                     ) : (
@@ -59,7 +59,7 @@ export default function PublicPromo({ promos }: { promos: Promo[] }) {
                                         <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#111', marginBottom: '8px' }}>{promo.title}</h3>
                                         <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '12px', lineHeight: '1.6' }}>{promo.description}</p>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#999' }}>
-                                            <i className="fas fa-calendar-alt"></i>
+                                            <span>📅</span>
                                             <span>{formatDate(promo.start_date)} - {formatDate(promo.end_date)}</span>
                                         </div>
                                     </div>

@@ -44,13 +44,11 @@ export default function PublicFaq() {
                                     }}
                                 >
                                     <span>{faq.q}</span>
-                                    <i
-                                        className="fas fa-chevron-down"
-                                        style={{
-                                            color: '#f7a928', transition: 'transform 0.3s', flexShrink: 0,
-                                            transform: openIndex === i ? 'rotate(180deg)' : 'rotate(0deg)',
-                                        }}
-                                    ></i>
+                                    <span style={{
+                                        color: '#f7a928', transition: 'transform 0.3s', flexShrink: 0, fontSize: '0.8rem',
+                                        display: 'inline-block',
+                                        transform: openIndex === i ? 'rotate(180deg)' : 'rotate(0deg)',
+                                    }}>▼</span>
                                 </button>
                                 <div style={{
                                     maxHeight: openIndex === i ? '200px' : '0',

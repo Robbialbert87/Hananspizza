@@ -1,14 +1,14 @@
 import { Head, useForm, router } from '@inertiajs/react';
-import { Tag, Plus, Search, Edit, Trash2, Calendar, X, Save } from 'lucide-react';
+import { Tag, Plus, Search, Edit, Trash2, Calendar, X, Save, Pizza } from 'lucide-react';
 import { useState } from 'react';
 
-const formatPrice = (price: string) => price;
+interface MenuItem { id: number; name: string; category: string; price: number; }
 
-interface Promo { id: number; title: string; description: string | null; discount: string; is_active: boolean; start_date: string; end_date: string; }
+interface Promo { id: number; menu_item_id: number | null; title: string; description: string | null; discount: string; is_active: boolean; start_date: string; end_date: string; menu_item: MenuItem | null; }
 
-const emptyForm = { title: '', description: '', discount: '', is_active: true, start_date: '', end_date: '' };
+const emptyForm = { menu_item_id: '', title: '', description: '', discount: '', is_active: true, start_date: '', end_date: '' };
 
-export default function Promos({ promos }: { promos: Promo[] }) {
+export default function Promos({ promos, menuItems }: { promos: Promo[]; menuItems: MenuItem[] }) {
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [showModal, setShowModal] = useState(false);
@@ -29,17 +29,18 @@ export default function Promos({ promos }: { promos: Promo[] }) {
     const openCreate = () => { setEditingItem(null); reset(); setShowModal(true); };
     const openEdit = (item: Promo) => {
         setEditingItem(item);
-        setData({ title: item.title, description: item.description || '', discount: item.discount, is_active: item.is_active, start_date: item.start_date?.split('T')[0] || '', end_date: item.end_date?.split('T')[0] || '' });
+        setData({ menu_item_id: item.menu_item_id?.toString() || '', title: item.title, description: item.description || '', discount: item.discount, is_active: item.is_active, start_date: item.start_date?.split('T')[0] || '', end_date: item.end_date?.split('T')[0] || '' });
         setShowModal(true);
     };
     const closeModal = () => { setShowModal(false); setEditingItem(null); reset(); };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const payload = { ...data, menu_item_id: data.menu_item_id ? Number(data.menu_item_id) : null };
         if (editingItem) {
-            put(`/admin/promos/${editingItem.id}`, { onSuccess: () => closeModal() });
+            router.put(`/admin/promos/${editingItem.id}`, payload, { onSuccess: () => closeModal() });
         } else {
-            post('/admin/promos', { onSuccess: () => closeModal() });
+            router.post('/admin/promos', payload, { onSuccess: () => closeModal() });
         }
     };
 
@@ -113,6 +114,11 @@ export default function Promos({ promos }: { promos: Promo[] }) {
                                 </div>
                                 <div className="p-5">
                                     <h3 className="font-bold text-slate-900 text-lg mb-2">{promo.title}</h3>
+                                    {promo.menu_item && (
+                                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-medium mb-3">
+                                            <Pizza className="w-3 h-3" /> {promo.menu_item.name}
+                                        </div>
+                                    )}
                                     <p className="text-sm text-slate-500 mb-4 line-clamp-2">{promo.description}</p>
                                     <div className="flex items-center gap-4 text-xs text-slate-400 mb-4">
                                         <div className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /><span>{promo.start_date?.split('T')[0]}</span></div>
@@ -139,6 +145,17 @@ export default function Promos({ promos }: { promos: Promo[] }) {
                             <button onClick={closeModal} className="p-2 rounded-lg hover:bg-slate-100 text-slate-400"><X className="w-5 h-5" /></button>
                         </div>
                         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Linked Menu Item</label>
+                                <select value={data.menu_item_id} onChange={e => setData('menu_item_id', e.target.value)}
+                                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400">
+                                    <option value="">-- No menu item --</option>
+                                    {menuItems.map(item => (
+                                        <option key={item.id} value={item.id}>{item.name} ({item.category})</option>
+                                    ))}
+                                </select>
+                                {errors.menu_item_id && <p className="text-red-500 text-xs mt-1">{errors.menu_item_id}</p>}
+                            </div>
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Title *</label>
                                 <input type="text" value={data.title} onChange={e => setData('title', e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />

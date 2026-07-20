@@ -20,8 +20,8 @@ export default function PublicAbout() {
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px', marginBottom: '60px' }}>
                         <div style={{ background: '#fff', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-                            <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                                <i className="fas fa-pizza-slice" style={{ fontSize: '1.4rem', color: '#fff' }}></i>
+                            <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', fontSize: '1.4rem' }}>
+                                🍕
                             </div>
                             <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#111', marginBottom: '12px' }}>Visi Kami</h3>
                             <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.7' }}>
@@ -29,8 +29,8 @@ export default function PublicAbout() {
                             </p>
                         </div>
                         <div style={{ background: '#fff', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-                            <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                                <i className="fas fa-heart" style={{ fontSize: '1.4rem', color: '#fff' }}></i>
+                            <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', fontSize: '1.4rem' }}>
+                                ❤️
                             </div>
                             <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#111', marginBottom: '12px' }}>Misi Kami</h3>
                             <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.7' }}>
@@ -38,8 +38,8 @@ export default function PublicAbout() {
                             </p>
                         </div>
                         <div style={{ background: '#fff', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-                            <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                                <i className="fas fa-award" style={{ fontSize: '1.4rem', color: '#fff' }}></i>
+                            <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', fontSize: '1.4rem' }}>
+                                🏆
                             </div>
                             <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#111', marginBottom: '12px' }}>Janji Kami</h3>
                             <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.7' }}>
@@ -50,13 +50,13 @@ export default function PublicAbout() {
 
                     <div style={{ background: '#fff', borderRadius: '16px', padding: '40px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '32px', textAlign: 'center' }}>
                         {[
-                            { num: '2019', label: 'Berdiri', icon: 'fa-calendar' },
-                            { num: '50K+', label: 'Pelanggan', icon: 'fa-users' },
-                            { num: '15+', label: 'Varian Menu', icon: 'fa-pizza-slice' },
-                            { num: '4.8', label: 'Rating', icon: 'fa-star' },
+                            { num: '2019', label: 'Berdiri', icon: '📅' },
+                            { num: '50K+', label: 'Pelanggan', icon: '👥' },
+                            { num: '15+', label: 'Varian Menu', icon: '🍕' },
+                            { num: '4.8', label: 'Rating', icon: '⭐' },
                         ].map((stat, i) => (
                             <div key={i}>
-                                <i className={`fas ${stat.icon}`} style={{ fontSize: '1.5rem', color: '#f7a928', marginBottom: '12px', display: 'block' }}></i>
+                                <div style={{ fontSize: '1.5rem', marginBottom: '12px' }}>{stat.icon}</div>
                                 <div style={{ fontSize: '2rem', fontWeight: '800', color: '#111', fontFamily: "'Playfair Display', serif" }}>{stat.num}</div>
                                 <div style={{ fontSize: '0.9rem', color: '#888', marginTop: '4px' }}>{stat.label}</div>
                             </div>

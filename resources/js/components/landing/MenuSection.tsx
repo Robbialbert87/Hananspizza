@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from '@inertiajs/react';
 
 const formatPrice = (price: number) => `Rp ${price.toLocaleString('id-ID')}`;
 
@@ -41,9 +42,19 @@ export default function MenuSection({ menuItems }: { menuItems: MenuItem[] }) {
         { key: 'dessert', label: 'Dessert' },
     ];
 
+    const categoryCounts: Record<string, number> = {
+        all: menuItems.length,
+        pizza: menuItems.filter(i => i.category === 'pizza').length,
+        minuman: menuItems.filter(i => i.category === 'minuman').length,
+        snack: menuItems.filter(i => i.category === 'snack').length,
+        dessert: menuItems.filter(i => i.category === 'dessert').length,
+    };
+
     const filteredItems = activeFilter === 'all'
         ? menuItems
         : menuItems.filter(item => item.category === activeFilter);
+
+    const displayedItems = filteredItems.slice(0, 4);
 
     const toggleLike = (id: number, e: React.MouseEvent) => {
         e.stopPropagation();
@@ -65,6 +76,7 @@ export default function MenuSection({ menuItems }: { menuItems: MenuItem[] }) {
                     <div className="sline"></div>
                 </div>
 
+                {/* Category tabs */}
                 <div className="menu-tabs">
                     {filters.map(f => (
                         <button
@@ -77,24 +89,22 @@ export default function MenuSection({ menuItems }: { menuItems: MenuItem[] }) {
                     ))}
                 </div>
 
-                <div className="menu-grid">
-                    {filteredItems.map((item) => (
-                        <div className="mcard" key={item.id}>
+                <div className="menu-grid menu-grid-animate">
+                    {displayedItems.map((item, i) => (
+                        <Link key={item.id} href={`/menu/${item.id}`} className="mcard" style={{ animationDelay: `${i * 0.15}s` }}>
                             <div className="mimg">
                                 {getImageSrc(item) ? (
                                     <img src={getImageSrc(item)!} alt={item.name} />
                                 ) : (
-                                    <div style={{ width: '100%', height: '100%', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <i className="fas fa-pizza-slice" style={{ fontSize: '2rem', color: '#ccc' }}></i>
-                                    </div>
+                                    <div style={{ width: '100%', height: '100%', background: '#fef0dc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem' }}>🍕</div>
                                 )}
                                 {item.badge && (
                                     <div className={`mbdg ${item.badge}`}>
-                                        <i className="fas fa-star"></i> {badgeLabels[item.badge] || item.badge}
+                                        <span>★</span> {badgeLabels[item.badge] || item.badge}
                                     </div>
                                 )}
                                 <div className="mhrt" onClick={(e) => toggleLike(item.id, e)}>
-                                    <i className={liked.includes(item.id) ? 'fas fa-heart' : 'far fa-heart'}></i>
+                                    <span style={{ fontSize: '0.85rem' }}>{liked.includes(item.id) ? '❤️' : '🤍'}</span>
                                 </div>
                             </div>
                             <div className="mbody">
@@ -108,28 +118,26 @@ export default function MenuSection({ menuItems }: { menuItems: MenuItem[] }) {
                                             {item.old_price > 0 && <small>{formatPrice(item.old_price)}</small>}
                                         </div>
                                         <div className="mstars">
-                                            <i className="fas fa-star"></i>
+                                            <span>★</span>
                                             <span> ({item.reviews})</span>
                                         </div>
                                     </div>
-                                    <button className="madd" title="Pesan Sekarang">
-                                        <i className="fas fa-plus"></i>
-                                    </button>
+                                    <button className="madd" title="Pesan Sekarang">+</button>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
 
-                {filteredItems.length === 0 && (
+                {displayedItems.length === 0 && (
                     <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>
-                        <i className="fas fa-search" style={{ fontSize: '2rem', marginBottom: '12px', display: 'block' }}></i>
+                        <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🔍</div>
                         Tidak ada menu dalam kategori ini.
                     </div>
                 )}
 
                 <div className="view-all-container">
-                    <a href="#menu" className="btn-red"><i className="fas fa-th-large"></i> View Full Menu</a>
+                    <Link href="/menu" className="btn-red"><span>📋</span> View Full Menu</Link>
                 </div>
             </div>
         </section>

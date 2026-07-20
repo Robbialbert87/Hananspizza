@@ -36,6 +36,10 @@ interface MenuItem {
     rating: number;
     reviews: number;
     is_active: boolean;
+    gofood_link: string | null;
+    grabfood_link: string | null;
+    shopeefood_link: string | null;
+    whatsapp_link: string | null;
 }
 
 export default function PublicMenuDetail({ menuItem }: { menuItem: MenuItem }) {
@@ -74,13 +78,12 @@ export default function PublicMenuDetail({ menuItem }: { menuItem: MenuItem }) {
                         onMouseEnter={e => { e.currentTarget.style.borderColor = '#f7a928'; e.currentTarget.style.color = '#f7a928'; }}
                         onMouseLeave={e => { e.currentTarget.style.borderColor = '#eee'; e.currentTarget.style.color = '#666'; }}
                     >
-                        <i className="fas fa-arrow-left" style={{ fontSize: '0.8rem' }}></i>
-                        Kembali ke Menu
+                        <span style={{ color: '#666', fontSize: '0.9rem' }}>← Kembali ke Menu</span>
                     </Link>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}>
+                    <div className="menu-detail-grid">
                         {imgSrc && (
-                            <div style={{ borderRadius: 24, overflow: 'hidden', boxShadow: '0 4px 30px rgba(0,0,0,0.1)' }}>
+                            <div className="menu-detail-image" style={{ borderRadius: 24, overflow: 'hidden', boxShadow: '0 4px 30px rgba(0,0,0,0.1)' }}>
                                 <img src={imgSrc} alt={menuItem.name} style={{ width: '100%', height: 'auto', maxHeight: 480, objectFit: 'cover', display: 'block' }} />
                             </div>
                         )}
@@ -103,7 +106,7 @@ export default function PublicMenuDetail({ menuItem }: { menuItem: MenuItem }) {
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
                                 <div style={{ color: '#f7a928', fontSize: '0.95rem' }}>
                                     {Array.from({ length: 5 }, (_, i) => (
-                                        <i key={i} className={`fas fa-star${i < Math.round(menuItem.rating) ? '' : ' fa-regular'}`} style={{ marginRight: 2 }}></i>
+                                        <span key={i} style={{ color: i < Math.round(menuItem.rating) ? '#f7a928' : '#ddd' }}>★</span>
                                     ))}
                                 </div>
                                 <span style={{ fontSize: '0.85rem', color: '#888' }}>({menuItem.reviews} reviews)</span>
@@ -126,17 +129,47 @@ export default function PublicMenuDetail({ menuItem }: { menuItem: MenuItem }) {
                                 </p>
                             )}
 
-                            <div style={{ display: 'flex', gap: 12 }}>
-                                <a href="#" style={{ background: 'linear-gradient(135deg, #f7a928, #e59a1f)', color: '#111', border: 'none', padding: '14px 32px', borderRadius: 50, fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, transition: 'transform 0.3s', boxShadow: '0 8px 24px rgba(247,169,40,0.35)' }}
-                                   onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-                                   onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
-                                    <i className="fas fa-shopping-cart"></i> Pesan Sekarang
-                                </a>
-                                <button style={{ background: '#fff', border: '2px solid #eee', padding: '14px 24px', borderRadius: 50, fontWeight: 600, fontSize: '0.95rem', color: '#666', cursor: 'pointer', transition: 'all 0.3s', display: 'inline-flex', alignItems: 'center', gap: 8 }}
-                                        onMouseEnter={e => { e.currentTarget.style.borderColor = '#f7a928'; e.currentTarget.style.color = '#f7a928'; }}
-                                        onMouseLeave={e => { e.currentTarget.style.borderColor = '#eee'; e.currentTarget.style.color = '#666'; }}>
-                                    <i className="far fa-heart"></i> Favorite
-                                </button>
+                            <div style={{ marginTop: 32 }}>
+                                <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 }}>Pesan Sekarang via</p>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                                    {[
+                                        { key: 'gofood', label: 'GoFood', icon: '🍔', color: '#00aa13', link: menuItem.gofood_link },
+                                        { key: 'grabfood', label: 'GrabFood', icon: '🛵', color: '#00b14f', link: menuItem.grabfood_link },
+                                        { key: 'shopeefood', label: 'ShopeeFood', icon: '🛍️', color: '#ee4d2d', link: menuItem.shopeefood_link },
+                                        { key: 'whatsapp', label: 'WhatsApp', icon: '💬', color: '#25D366', link: menuItem.whatsapp_link },
+                                    ].map(platform => (
+                                        platform.link ? (
+                                            <a key={platform.key} href={platform.link} target="_blank" rel="noopener noreferrer"
+                                                style={{
+                                                    display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px',
+                                                    borderRadius: 12, background: platform.color, color: '#fff',
+                                                    textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem',
+                                                    transition: 'transform 0.25s', boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                                }}
+                                                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
+                                                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+                                                <span style={{ fontSize: '1.2rem' }}>{platform.icon}</span>
+                                                <div style={{ lineHeight: 1.3 }}>
+                                                    <div>{platform.label}</div>
+                                                    <div style={{ fontSize: '0.65rem', fontWeight: 400, opacity: 0.85 }}>Pesan di sini →</div>
+                                                </div>
+                                            </a>
+                                        ) : (
+                                            <div key={platform.key}
+                                                style={{
+                                                    display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px',
+                                                    borderRadius: 12, background: '#f5f5f5', color: '#ccc',
+                                                    fontWeight: 600, fontSize: '0.85rem', cursor: 'not-allowed',
+                                                }}>
+                                                <span style={{ fontSize: '1.2rem', opacity: 0.5 }}>{platform.icon}</span>
+                                                <div style={{ lineHeight: 1.3 }}>
+                                                    <div style={{ color: '#bbb' }}>{platform.label}</div>
+                                                    <div style={{ fontSize: '0.65rem', fontWeight: 400, color: '#d0d0d0' }}>Belum terhubung ke {platform.label}</div>
+                                                </div>
+                                            </div>
+                                        )
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>

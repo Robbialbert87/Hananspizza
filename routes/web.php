@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrdersController;
@@ -12,7 +13,7 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     $menuItems = MenuItem::where('is_active', true)->latest()->get();
-    $promos = Promo::where('is_active', true)->latest()->get();
+    $promos = Promo::with('menuItem')->where('is_active', true)->latest()->get();
 
     return Inertia::render('welcome', [
         'menuItems' => $menuItems,
@@ -29,7 +30,7 @@ Route::get('menu', function () {
 })->name('public.menu');
 
 Route::get('promo', function () {
-    $promos = Promo::where('is_active', true)->latest()->get();
+    $promos = Promo::with('menuItem')->where('is_active', true)->latest()->get();
 
     return Inertia::render('public-promo', [
         'promos' => $promos,
@@ -67,6 +68,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('admin/menu', [MenuController::class, 'store'])->name('menu.store');
     Route::put('admin/menu/{menuItem}', [MenuController::class, 'update'])->name('menu.update');
     Route::delete('admin/menu/{menuItem}', [MenuController::class, 'destroy'])->name('menu.destroy');
+
+    Route::get('admin/categories', [CategoriesController::class, 'index'])->name('categories');
+    Route::post('admin/categories', [CategoriesController::class, 'store'])->name('categories.store');
+    Route::put('admin/categories/{category}', [CategoriesController::class, 'update'])->name('categories.update');
+    Route::delete('admin/categories/{category}', [CategoriesController::class, 'destroy'])->name('categories.destroy');
 
     Route::get('admin/orders', [OrdersController::class, 'index'])->name('orders');
     Route::post('admin/orders', [OrdersController::class, 'store'])->name('orders.store');

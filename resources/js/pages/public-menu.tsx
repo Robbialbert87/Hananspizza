@@ -112,17 +112,17 @@ export default function PublicMenu({ menuItems }: { menuItems: MenuItem[] }) {
                                     {getImageSrc(item) ? (
                                         <img src={getImageSrc(item)!} alt={item.name} />
                                     ) : (
-                                        <div style={{ width: '100%', height: '100%', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <i className="fas fa-pizza-slice" style={{ fontSize: '2rem', color: '#ccc' }}></i>
+                                        <div style={{ width: '100%', height: '100%', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', color: '#ccc' }}>
+                                            🍕
                                         </div>
                                     )}
                                     {item.badge && (
                                         <div className={`mbdg ${item.badge}`}>
-                                            <i className="fas fa-star"></i> {badgeLabels[item.badge] || item.badge}
+                                            ★ {badgeLabels[item.badge] || item.badge}
                                         </div>
                                     )}
                                     <div className="mhrt" onClick={(e) => toggleLike(item.id, e)}>
-                                        <i className={liked.includes(item.id) ? 'fas fa-heart' : 'far fa-heart'}></i>
+                                        <span style={{ fontSize: '0.9rem' }}>{liked.includes(item.id) ? '❤️' : '🤍'}</span>
                                     </div>
                                 </div>
                                 <div className="mbody">
@@ -136,13 +136,11 @@ export default function PublicMenu({ menuItems }: { menuItems: MenuItem[] }) {
                                                 {item.old_price > 0 && <small>{formatPrice(item.old_price)}</small>}
                                             </div>
                                             <div className="mstars">
-                                                <i className="fas fa-star"></i>
+                                                ★
                                                 <span> ({item.reviews})</span>
                                             </div>
                                         </div>
-                                        <button className="madd" title="Pesan Sekarang" onClick={(e) => { e.preventDefault(); }}>
-                                            <i className="fas fa-plus"></i>
-                                        </button>
+                                        <button className="madd" title="Pesan Sekarang" onClick={(e) => { e.preventDefault(); }}>+</button>
                                     </div>
                                 </div>
                             </a>
@@ -151,7 +149,7 @@ export default function PublicMenu({ menuItems }: { menuItems: MenuItem[] }) {
 
                     {filteredItems.length === 0 && (
                         <div style={{ textAlign: 'center', padding: '60px', color: '#888' }}>
-                            <i className="fas fa-search" style={{ fontSize: '2rem', marginBottom: '12px', display: 'block' }}></i>
+                            <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🔍</div>
                             Tidak ada menu dalam kategori ini.
                         </div>
                     )}

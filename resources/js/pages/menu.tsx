@@ -25,7 +25,7 @@ interface MenuItem {
     is_active: boolean;
 }
 
-const emptyForm = { name: '', description: '', category: 'pizza', price: 0, old_price: 0, image: '', badge: '', is_active: true };
+const emptyForm = { name: '', description: '', category: 'pizza', price: 0, old_price: 0, image: '', badge: '', is_active: true, image_file: null as any, gofood_link: '', grabfood_link: '', shopeefood_link: '', whatsapp_link: '' };
 
 export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
     const [search, setSearch] = useState('');
@@ -35,6 +35,7 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
     const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
     const [imageMode, setImageMode] = useState<'url' | 'upload'>('url');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [submitError, setSubmitError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const { data, setData, post, put, processing, errors, reset } = useForm(emptyForm);
@@ -56,11 +57,13 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
         reset();
         setImageMode('url');
         setImagePreview(null);
+        setSubmitError(null);
         setShowModal(true);
     };
 
     const openEdit = (item: MenuItem) => {
         setEditingItem(item);
+        setSubmitError(null);
         setData({
             name: item.name,
             description: item.description || '',
@@ -70,6 +73,10 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
             image: item.image || '',
             badge: item.badge || '',
             is_active: item.is_active,
+            gofood_link: (item as any).gofood_link || '',
+            grabfood_link: (item as any).grabfood_link || '',
+            shopeefood_link: (item as any).shopeefood_link || '',
+            whatsapp_link: (item as any).whatsapp_link || '',
         });
         const isUpload = item.image && !item.image.startsWith('http');
         setImageMode(isUpload ? 'upload' : 'url');
@@ -81,6 +88,7 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
         setShowModal(false);
         setEditingItem(null);
         setImagePreview(null);
+        setSubmitError(null);
         reset();
     };
 
@@ -101,16 +109,35 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const submitData: Record<string, any> = { ...data };
-        if (imageMode === 'upload') {
-            submitData.image = '';
+        setSubmitError(null);
+        const url = editingItem ? `/admin/menu/${editingItem.id}` : '/admin/menu';
+        const cb = {
+            onSuccess: () => closeModal(),
+            onError: (errs: Record<string, string>) => {
+                const msgs = Object.values(errs).filter(Boolean).join(', ');
+                setSubmitError(msgs || 'Validation failed');
+            },
+        };
+        if (imageMode === 'upload' && data.image_file instanceof File) {
+            const fd = new FormData();
+            fd.append('name', data.name);
+            fd.append('description', data.description || '');
+            fd.append('category', data.category);
+            fd.append('price', String(data.price));
+            fd.append('old_price', String(data.old_price));
+            if (data.badge) fd.append('badge', data.badge);
+            fd.append('is_active', data.is_active ? '1' : '0');
+            fd.append('gofood_link', data.gofood_link || '');
+            fd.append('grabfood_link', data.grabfood_link || '');
+            fd.append('shopeefood_link', data.shopeefood_link || '');
+            fd.append('whatsapp_link', data.whatsapp_link || '');
+            fd.append('image', '');
+            fd.append('image_file', data.image_file);
+            if (editingItem) fd.append('_method', 'put');
+            router.post(url, fd, cb);
         } else {
-            delete submitData.image_file;
-        }
-        if (editingItem) {
-            router.post(`/admin/menu/${editingItem.id}`, { ...submitData, _method: 'put' }, { onSuccess: () => closeModal(), forceFormData: true });
-        } else {
-            post('/admin/menu', { ...submitData, onSuccess: () => closeModal(), forceFormData: true });
+            setData('image_file', null as any);
+            (editingItem ? put : post)(url, cb);
         }
     };
 
@@ -219,6 +246,12 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
                             <button onClick={closeModal} className="p-2 rounded-lg hover:bg-slate-100 text-slate-400"><X className="w-5 h-5" /></button>
                         </div>
                         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                            {submitError && (
+                                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-start gap-2">
+                                    <X className="w-4 h-4 mt-0.5 shrink-0" />
+                                    <span>{submitError}</span>
+                                </div>
+                            )}
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Name *</label>
                                 <input type="text" value={data.name} onChange={e => setData('name', e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
@@ -234,6 +267,7 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
                                     <select value={data.category} onChange={e => setData('category', e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400">
                                         <option value="pizza">Pizza</option><option value="minuman">Minuman</option><option value="snack">Snack</option><option value="dessert">Dessert</option>
                                     </select>
+                                    {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Badge</label>
@@ -245,12 +279,12 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Price (Rp) *</label>
-                                    <input type="number" value={data.price} onChange={e => setData('price', parseInt(e.target.value) || 0)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
+                                    <input type="number" value={data.price || ''} onChange={e => setData('price', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
                                     {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Old Price (Rp)</label>
-                                    <input type="number" value={data.old_price} onChange={e => setData('old_price', parseInt(e.target.value) || 0)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
+                                    <input type="number" value={data.old_price || ''} onChange={e => setData('old_price', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
                                 </div>
                             </div>
                             <div>
@@ -268,25 +302,52 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
                                 {imageMode === 'url' ? (
                                     <input type="url" value={data.image} onChange={e => handleUrlChange(e.target.value)} placeholder="https://example.com/image.jpg" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
                                 ) : (
-                                    <div>
+                                    <div className="relative">
                                         <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                                         <button type="button" onClick={() => fileInputRef.current?.click()}
-                                            className="w-full px-4 py-8 rounded-xl border-2 border-dashed border-slate-200 bg-white text-sm hover:border-amber-400 hover:bg-amber-50/30 transition-all flex flex-col items-center gap-2">
-                                            <Upload className="w-8 h-8 text-slate-400" />
-                                            <span className="text-slate-600 font-medium">Klik untuk upload gambar</span>
-                                            <span className="text-slate-400 text-xs">JPG, PNG, WebP (Maks 2MB)</span>
+                                            className="w-full px-4 py-8 rounded-xl border-2 border-dashed border-slate-200 bg-white text-sm hover:border-amber-400 hover:bg-amber-50/30 transition-all flex flex-col items-center justify-center gap-2 min-h-[140px]">
+                                            {imagePreview ? (
+                                                <>
+                                                    <img src={imagePreview} alt="Preview" className="h-20 w-auto rounded-lg object-cover border border-slate-200" />
+                                                    <span className="text-slate-500 text-xs">Klik untuk ganti gambar</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Upload className="w-8 h-8 text-slate-400" />
+                                                    <span className="text-slate-600 font-medium">Klik untuk upload gambar</span>
+                                                    <span className="text-slate-400 text-xs">JPG, PNG, WebP (Maks 2MB)</span>
+                                                </>
+                                            )}
                                         </button>
+                                        {imagePreview && (
+                                            <button type="button" onClick={() => { setImagePreview(null); setData('image', ''); setData('image_file', null as any); if (fileInputRef.current) fileInputRef.current.value = ''; }}
+                                                className="absolute -top-2.5 -right-2.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-md hover:bg-red-600 text-xs">
+                                                <X className="w-3.5 h-3.5" />
+                                            </button>
+                                        )}
                                     </div>
                                 )}
-                                {imagePreview && (
-                                    <div className="mt-3 relative inline-block">
-                                        <img src={imagePreview} alt="Preview" className="w-24 h-24 rounded-xl object-cover border border-slate-200 shadow-sm" />
-                                        <button type="button" onClick={() => { setImagePreview(null); setData('image', ''); setData('image_file', null as any); if (fileInputRef.current) fileInputRef.current.value = ''; }}
-                                            className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow-md hover:bg-red-600">
-                                            <X className="w-3 h-3" />
-                                        </button>
+                            </div>
+                            <div className="border-t border-slate-100 pt-4">
+                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Order Links</p>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label className="block text-xs font-medium text-slate-600 mb-1">🍔 GoFood Link</label>
+                                        <input type="url" value={data.gofood_link} onChange={e => setData('gofood_link', e.target.value)} placeholder="https://gofood.co.id/..." className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
                                     </div>
-                                )}
+                                    <div>
+                                        <label className="block text-xs font-medium text-slate-600 mb-1">🛵 GrabFood Link</label>
+                                        <input type="url" value={data.grabfood_link} onChange={e => setData('grabfood_link', e.target.value)} placeholder="https://food.grab.com/..." className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-medium text-slate-600 mb-1">🛍️ ShopeeFood Link</label>
+                                        <input type="url" value={data.shopeefood_link} onChange={e => setData('shopeefood_link', e.target.value)} placeholder="https://shopeefood.co.id/..." className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-medium text-slate-600 mb-1">💬 WhatsApp Link</label>
+                                        <input type="url" value={data.whatsapp_link} onChange={e => setData('whatsapp_link', e.target.value)} placeholder="https://wa.me/62..." className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
+                                    </div>
+                                </div>
                             </div>
                             <div className="flex items-center gap-2">
                                 <input type="checkbox" checked={data.is_active} onChange={e => setData('is_active', e.target.checked)} className="w-4 h-4 rounded border-slate-300 text-amber-500 focus:ring-amber-500" />

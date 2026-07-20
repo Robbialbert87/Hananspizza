@@ -9,6 +9,7 @@ import {
     Tag,
     Users,
     ClipboardList,
+    FolderTree,
     ChevronRight,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
@@ -43,6 +44,11 @@ const managementNavItems: NavItem[] = [
         title: 'Kelola Menu',
         href: '/admin/menu',
         icon: Pizza,
+    },
+    {
+        title: 'Categories',
+        href: '/admin/categories',
+        icon: FolderTree,
     },
     {
         title: 'Orders',

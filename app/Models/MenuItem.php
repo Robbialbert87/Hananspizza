@@ -17,6 +17,10 @@ class MenuItem extends Model
         'rating',
         'reviews',
         'is_active',
+        'gofood_link',
+        'grabfood_link',
+        'shopeefood_link',
+        'whatsapp_link',
     ];
 
     protected $casts = [
