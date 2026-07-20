@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Category;
 use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\Promo;
@@ -16,6 +17,18 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
+        // Categories
+        $categories = [
+            ['name' => 'Pizza', 'slug' => 'pizza', 'icon' => '🍕'],
+            ['name' => 'Minuman', 'slug' => 'minuman', 'icon' => '🥤'],
+            ['name' => 'Snack', 'slug' => 'snack', 'icon' => '🍟'],
+            ['name' => 'Dessert', 'slug' => 'dessert', 'icon' => '🍰'],
+        ];
+
+        foreach ($categories as $cat) {
+            Category::create($cat);
+        }
+
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@pizzahouse.com',
