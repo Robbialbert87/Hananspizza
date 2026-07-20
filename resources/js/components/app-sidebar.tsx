@@ -2,17 +2,18 @@ import { Link } from '@inertiajs/react';
 import {
     LayoutDashboard,
     Pizza,
-    ShoppingBag,
     Settings,
     Globe,
-    BarChart3,
     Tag,
     Users,
     ClipboardList,
     FolderTree,
     Store,
     Image,
-    ChevronRight,
+    List,
+    UtensilsCrossed,
+    CupSoda,
+    Cookie,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -26,9 +27,6 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-    SidebarGroup,
-    SidebarGroupLabel,
-    SidebarGroupContent,
     useSidebar,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
@@ -47,6 +45,33 @@ const managementNavItems: NavItem[] = [
         title: 'Kelola Menu',
         href: '/admin/menu',
         icon: Pizza,
+        children: [
+            {
+                title: 'All Items',
+                href: '/admin/menu',
+                icon: List,
+            },
+            {
+                title: 'Pizza',
+                href: '/admin/menu?filter=pizza',
+                icon: UtensilsCrossed,
+            },
+            {
+                title: 'Minuman',
+                href: '/admin/menu?filter=minuman',
+                icon: CupSoda,
+            },
+            {
+                title: 'Snack',
+                href: '/admin/menu?filter=snack',
+                icon: Cookie,
+            },
+            {
+                title: 'Dessert',
+                href: '/admin/menu?filter=dessert',
+                icon: Cookie,
+            },
+        ],
     },
     {
         title: 'Categories',

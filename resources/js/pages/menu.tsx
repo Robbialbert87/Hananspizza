@@ -29,7 +29,8 @@ const emptyForm = { name: '', description: '', category: 'pizza', price: 0, old_
 
 export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
     const [search, setSearch] = useState('');
-    const [activeFilter, setActiveFilter] = useState('all');
+    const initialFilter = new URL(window.location.href).searchParams.get('filter') || 'all';
+    const [activeFilter, setActiveFilter] = useState(initialFilter);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [showModal, setShowModal] = useState(false);
     const [editingItem, setEditingItem] = useState<MenuItem | null>(null);

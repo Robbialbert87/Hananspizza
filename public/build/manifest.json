@@ -179,6 +179,13 @@
       "_wayfinder-Bp5UQJqX.js"
     ]
   },
+  "_list-cnXNKXsj.js": {
+    "file": "assets/list-cnXNKXsj.js",
+    "name": "list",
+    "imports": [
+      "_createLucideIcon-IlR-VM5b.js"
+    ]
+  },
   "_loader-circle-CAWl2fLp.js": {
     "file": "assets/loader-circle-CAWl2fLp.js",
     "name": "loader-circle",
@@ -380,7 +387,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-DrXrJZeU.css",
+    "file": "assets/app-BiDVFofY.css",
     "name": "app",
     "names": [
       "app.css"
@@ -389,7 +396,7 @@
     "isEntry": true
   },
   "resources/js/app.tsx": {
-    "file": "assets/app-ySeWsg0C.js",
+    "file": "assets/app-CpX2MbAf.js",
     "name": "app",
     "src": "resources/js/app.tsx",
     "isEntry": true,
@@ -406,6 +413,7 @@
       "_folder-tree-DHlCQJaM.js",
       "_settings-C1T25fu8.js",
       "_image-CjfSVkzC.js",
+      "_list-cnXNKXsj.js",
       "_pizza-B-BkvDyb.js",
       "_store-hWYshknT.js",
       "_tag-dvnHsgK8.js",
@@ -627,7 +635,7 @@
     ]
   },
   "resources/js/pages/menu.tsx": {
-    "file": "assets/menu-BvG5BrHL.js",
+    "file": "assets/menu-B_NYhC70.js",
     "name": "menu",
     "src": "resources/js/pages/menu.tsx",
     "isDynamicEntry": true,
@@ -635,6 +643,7 @@
       "_rolldown-runtime-Bh1tDfsg.js",
       "_jsx-runtime-BpbW1mBX.js",
       "_createLucideIcon-IlR-VM5b.js",
+      "_list-cnXNKXsj.js",
       "_pizza-B-BkvDyb.js",
       "_plus-C5vAj8oE.js",
       "_square-pen-rOypWejf.js",
