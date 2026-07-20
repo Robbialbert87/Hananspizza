@@ -7,6 +7,8 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\OutletsController;
 use App\Http\Controllers\PromosController;
 use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\HeroBannerController;
+use App\Models\HeroBanner;
 use App\Models\MenuItem;
 use App\Models\Promo;
 use Illuminate\Support\Facades\Route;
@@ -18,11 +20,13 @@ Route::get('/', function () {
     $promos = $promoMode
         ? Promo::with('menuItem')->where('is_active', true)->latest()->get()
         : collect();
+    $heroBanner = HeroBanner::where('is_active', true)->orderBy('sort_order')->first();
 
     return Inertia::render('welcome', [
         'menuItems' => $menuItems,
         'promos' => $promos,
         'promoMode' => $promoMode,
+        'heroBanner' => $heroBanner,
     ]);
 })->name('home');
 
@@ -102,6 +106,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('admin/promos', [PromosController::class, 'store'])->name('promos.store');
     Route::put('admin/promos/{promo}', [PromosController::class, 'update'])->name('promos.update');
     Route::delete('admin/promos/{promo}', [PromosController::class, 'destroy'])->name('promos.destroy');
+
+    Route::get('admin/hero-banners', [HeroBannerController::class, 'index'])->name('hero-banners');
+    Route::post('admin/hero-banners', [HeroBannerController::class, 'store'])->name('hero-banners.store');
+    Route::put('admin/hero-banners/{heroBanner}', [HeroBannerController::class, 'update'])->name('hero-banners.update');
+    Route::delete('admin/hero-banners/{heroBanner}', [HeroBannerController::class, 'destroy'])->name('hero-banners.destroy');
 
     Route::get('admin/customers', [CustomersController::class, 'index'])->name('customers');
     Route::post('admin/customers', [CustomersController::class, 'store'])->name('customers.store');

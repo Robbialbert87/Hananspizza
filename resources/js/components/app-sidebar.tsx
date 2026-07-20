@@ -11,6 +11,7 @@ import {
     ClipboardList,
     FolderTree,
     Store,
+    Image,
     ChevronRight,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
@@ -70,6 +71,11 @@ const managementNavItems: NavItem[] = [
         title: 'Customers',
         href: '/admin/customers',
         icon: Users,
+    },
+    {
+        title: 'Hero Banner',
+        href: '/admin/hero-banners',
+        icon: Image,
     },
 ];
 

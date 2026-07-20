@@ -10,12 +10,12 @@ import PlatformSection from '../components/landing/PlatformSection';
 import PromoSection from '../components/landing/PromoSection';
 import ReviewSection from '../components/landing/ReviewSection';
 
-export default function Welcome({ menuItems = [], promos = [], promoMode = false }: { menuItems?: any[]; promos?: any[]; promoMode?: boolean }) {
+export default function Welcome({ menuItems = [], promos = [], promoMode = false, heroBanner = null }: { menuItems?: any[]; promos?: any[]; promoMode?: boolean; heroBanner?: any | null }) {
     return (
         <div className="font-['Poppins',sans-serif] text-[#1B1B1B] leading-relaxed scroll-smooth" style={{ scrollPaddingTop: '80px' }}>
             <Head title="Hanan's Pizza" />
             <Navbar />
-            <HeroSection featuredItems={menuItems} />
+            <HeroSection featuredItems={menuItems} heroBanner={heroBanner} />
             <MenuSection menuItems={menuItems} />
             <PlatformSection />
             {promoMode && <PromoSection promos={promos} />}

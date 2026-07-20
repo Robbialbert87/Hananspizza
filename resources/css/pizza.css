@@ -189,32 +189,44 @@
 .hero-ombe {
     background: var(--bg-dark);
     color: #fff;
-    padding: 100px 0 60px;
     position: relative;
     overflow: hidden;
 }
-
-/* Greeting */
-.hero-greeting {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
+.hero-ombe .container {
+    padding-bottom: 60px;
 }
-.hero-greeting .greeting-text p {
-    font-size: 0.85rem;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 2px;
+.hero-full-bg {
+    position: absolute;
+    inset: 0;
 }
-.hero-greeting .greeting-text h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
+.hero-full-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.hero-full-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(17,17,17,0.15) 0%, rgba(17,17,17,0.5) 30%, rgba(17,17,17,0.85) 60%, var(--bg-dark) 100%);
+    z-index: 1;
+}
+.hero-banner-header {
+    padding: 100px 24px 16px;
+}
+.hero-banner-header .hero-banner-subtitle {
+    color: var(--primary);
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+.hero-banner-header .hero-banner-title {
+    font-family: var(--font-title);
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: #fff;
     margin: 0;
-}
-.hero-greeting .greeting-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    line-height: 1.15;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
 }
 .hero-icon-btn {
     width: 40px;
@@ -350,6 +362,12 @@
     padding: 130px 0 80px;
     position: relative;
     overflow: hidden;
+}
+.hero-desktop-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(17,17,17,0.85) 0%, rgba(17,17,17,0.6) 50%, rgba(17,17,17,0.3) 100%);
+    z-index: 1;
 }
 .hero-content {
     display: flex;
@@ -949,8 +967,10 @@
     .featured-swiper { scroll-snap-type: x mandatory; }
     .featured-card { flex: 0 0 155px; scroll-snap-align: start; }
     .featured-card .fc-img { height: 110px; }
-    .hero-ombe { padding: 90px 0 40px; }
-    .hero-greeting .greeting-text h2 { font-size: 1.2rem; }
+    .hero-ombe .container { padding-bottom: 40px; }
+    .hero-banner-header { padding: 90px 20px 14px; }
+    .hero-banner-header .hero-banner-title { font-size: 1.6rem; }
+    .hero-banner-header .hero-banner-subtitle { font-size: 0.85rem; }
     .cat-card { flex: 0 0 95px; padding: 12px 8px; }
     .cat-card .cat-icon { width: 36px; height: 36px; font-size: 1rem; }
     .cat-card .cat-name { font-size: 0.7rem; }
@@ -968,8 +988,10 @@
 }
 
 @media (max-width: 600px) {
-    .hero-ombe { padding: 80px 0 36px; }
-    .hero-greeting .greeting-text h2 { font-size: 1.1rem; }
+    .hero-ombe .container { padding-bottom: 36px; }
+    .hero-banner-header { padding: 80px 16px 12px; }
+    .hero-banner-header .hero-banner-title { font-size: 1.4rem; }
+    .hero-banner-header .hero-banner-subtitle { font-size: 0.78rem; }
     .section-title { font-size: 1.5rem; }
     .section-header { margin-bottom: 28px; }
     .platform-section, .promo-section, .review-section, .menu-section { padding: 56px 0; }
