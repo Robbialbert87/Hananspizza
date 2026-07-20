@@ -1,11 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
 import InputError from '@/components/input-error';
-import PasswordInput from '@/components/password-input';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
+import { useState } from 'react';
 import { store } from '@/routes/login';
 
 type Props = {
@@ -13,77 +8,77 @@ type Props = {
 };
 
 export default function Login({ status }: Props) {
+    const [showPw, setShowPw] = useState(false);
+
     return (
         <>
-            <Head title="Log in" />
+            <Head title="Sign In" />
 
             <Form
                 {...store.form()}
                 resetOnSuccess={['password']}
-                className="flex flex-col gap-6"
+                className="ombe-auth-form"
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    name="email"
-                                    required
-                                    autoFocus
-                                    tabIndex={1}
-                                    autoComplete="email"
-                                    placeholder="email@example.com"
-                                />
-                                <InputError message={errors.email} />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="password">Password</Label>
-                                <PasswordInput
-                                    id="password"
-                                    name="password"
-                                    required
-                                    tabIndex={2}
-                                    autoComplete="current-password"
-                                    placeholder="Password"
-                                />
-                                <InputError message={errors.password} />
-                            </div>
-
-                            <div className="flex items-center space-x-3">
-                                <Checkbox
-                                    id="remember"
-                                    name="remember"
-                                    tabIndex={3}
-                                />
-                                <Label htmlFor="remember">Remember me</Label>
-                            </div>
-
-                            <Button
-                                type="submit"
-                                className="mt-4 w-full"
-                                tabIndex={4}
-                                disabled={processing}
-                                data-test="login-button"
-                            >
-                                {processing && <Spinner />}
-                                Log in
-                            </Button>
+                        <div className="ombe-input-group">
+                            <span className="ombe-input-icon">📧</span>
+                            <input
+                                type="email"
+                                name="email"
+                                required
+                                autoFocus
+                                autoComplete="email"
+                                placeholder="Email address"
+                            />
                         </div>
+                        <InputError message={errors.email} />
+
+                        <div className="ombe-input-group">
+                            <span className="ombe-input-icon">🔒</span>
+                            <input
+                                type={showPw ? 'text' : 'password'}
+                                name="password"
+                                required
+                                autoComplete="current-password"
+                                placeholder="Password"
+                            />
+                            <button
+                                type="button"
+                                className="toggle-pw"
+                                onClick={() => setShowPw(p => !p)}
+                                tabIndex={-1}
+                            >
+                                {showPw ? '🙈' : '👁️'}
+                            </button>
+                        </div>
+                        <InputError message={errors.password} />
+
+                        <label className="ombe-checkbox">
+                            <input type="checkbox" name="remember" />
+                            <span>Remember me</span>
+                        </label>
+
+                        <button type="submit" disabled={processing} className="ombe-btn">
+                            {processing && '⏳ '}
+                            Sign In
+                        </button>
+
+                        {status && (
+                            <p style={{ textAlign: 'center', fontSize: '0.85rem', color: '#4ade80', marginTop: '8px' }}>
+                                {status}
+                            </p>
+                        )}
                     </>
                 )}
             </Form>
 
-            {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
+
         </>
     );
 }
 
-Login.layout = {};
+Login.layout = {
+    title: 'Sign In',
+    description: 'Welcome back! Sign in to continue',
+};
