@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
 
-const categories = [
-    { key: 'all', label: 'All', icon: '🍕', count: 0 },
-    { key: 'pizza', label: 'Pizza', icon: '🍕', count: 0 },
-    { key: 'minuman', label: 'Minuman', icon: '🥤', count: 0 },
-    { key: 'snack', label: 'Snack', icon: '🍟', count: 0 },
-    { key: 'dessert', label: 'Dessert', icon: '🍰', count: 0 },
+const allCategories = [
+    { key: 'all', label: 'All', icon: '🍕' },
+    { key: 'pizza', label: 'Pizza', icon: '🍕' },
+    { key: 'minuman', label: 'Minuman', icon: '🥤' },
+    { key: 'snack', label: 'Snack', icon: '🍟' },
+    { key: 'dessert', label: 'Dessert', icon: '🍰' },
 ];
 
 interface Props {
@@ -16,6 +16,10 @@ interface Props {
 }
 
 export default function CategorySwiper({ active, onChange, counts }: Props) {
+    const categories = allCategories.filter(
+        cat => cat.key === 'all' || (counts[cat.key] || 0) > 0
+    );
+
     return (
         <div className="categories-swiper">
             {categories.map(cat => (

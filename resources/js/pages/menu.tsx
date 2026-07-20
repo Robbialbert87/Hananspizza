@@ -41,13 +41,24 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
 
     const { data, setData, post, put, processing, errors, reset } = useForm(emptyForm);
 
-    const filters = [
-        { key: 'all', label: 'All Items', count: menuItems.length },
-        { key: 'pizza', label: 'Pizza', count: menuItems.filter(i => i.category === 'pizza').length },
-        { key: 'minuman', label: 'Minuman', count: menuItems.filter(i => i.category === 'minuman').length },
-        { key: 'snack', label: 'Snack', count: menuItems.filter(i => i.category === 'snack').length },
-        { key: 'dessert', label: 'Dessert', count: menuItems.filter(i => i.category === 'dessert').length },
+    const allFilters = [
+        { key: 'all', label: 'All Items' },
+        { key: 'pizza', label: 'Pizza' },
+        { key: 'minuman', label: 'Minuman' },
+        { key: 'snack', label: 'Snack' },
+        { key: 'dessert', label: 'Dessert' },
     ];
+    const countByCategory: Record<string, number> = {
+        all: menuItems.length,
+        pizza: menuItems.filter(i => i.category === 'pizza').length,
+        minuman: menuItems.filter(i => i.category === 'minuman').length,
+        snack: menuItems.filter(i => i.category === 'snack').length,
+        dessert: menuItems.filter(i => i.category === 'dessert').length,
+    };
+    const filters = allFilters.map(f => ({
+        ...f,
+        count: countByCategory[f.key] || 0,
+    })).filter(f => f.key === 'all' || f.count > 0);
 
     const filtered = menuItems
         .filter(i => activeFilter === 'all' || i.category === activeFilter)

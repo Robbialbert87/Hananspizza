@@ -34,7 +34,7 @@ export default function MenuSection({ menuItems }: { menuItems: MenuItem[] }) {
     const [activeFilter, setActiveFilter] = useState('all');
     const [liked, setLiked] = useState<number[]>([]);
 
-    const filters = [
+    const allFilters = [
         { key: 'all', label: 'All' },
         { key: 'pizza', label: 'Pizza' },
         { key: 'minuman', label: 'Minuman' },
@@ -49,6 +49,10 @@ export default function MenuSection({ menuItems }: { menuItems: MenuItem[] }) {
         snack: menuItems.filter(i => i.category === 'snack').length,
         dessert: menuItems.filter(i => i.category === 'dessert').length,
     };
+
+    const filters = allFilters.filter(
+        f => f.key === 'all' || categoryCounts[f.key] > 0
+    );
 
     const filteredItems = activeFilter === 'all'
         ? menuItems
