@@ -329,7 +329,7 @@ export default function AuthSimpleLayout({
                 <div className="pizza-auth-left-bg" />
                 <div className="pizza-auth-left-content">
                     <h1>
-                        PIZZA <span>HOUSE</span>
+                        Hanan's <span>Pizza</span>
                     </h1>
                     <p>Pizza lezat dengan bahan terbaik, dibuat setiap hari untuk pengalaman terbaik.</p>
                     <div className="pizza-auth-left-features">
@@ -356,12 +356,9 @@ export default function AuthSimpleLayout({
                             <AppLogoIcon className="size-7 fill-current text-white" />
                         </div>
                         <div className="pizza-auth-logo-text">
-                            PIZZA <span>HOUSE</span>
+                            Hanan's <span>Pizza</span>
                         </div>
                     </div>
-
-                    <h2 className="pizza-auth-title">{title}</h2>
-                    <p className="pizza-auth-desc">{description}</p>
 
                     {children}
 
