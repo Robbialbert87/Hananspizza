@@ -32,7 +32,6 @@ interface MenuItem {
 
 export default function MenuSection({ menuItems }: { menuItems: MenuItem[] }) {
     const [activeFilter, setActiveFilter] = useState('all');
-    const [liked, setLiked] = useState<number[]>([]);
 
     const allFilters = [
         { key: 'all', label: 'All' },
@@ -59,11 +58,6 @@ export default function MenuSection({ menuItems }: { menuItems: MenuItem[] }) {
         : menuItems.filter(item => item.category === activeFilter);
 
     const displayedItems = filteredItems.slice(0, 4);
-
-    const toggleLike = (id: number, e: React.MouseEvent) => {
-        e.stopPropagation();
-        setLiked(prev => prev.includes(id) ? prev.filter(n => n !== id) : [...prev, id]);
-    };
 
     const getImageSrc = (item: MenuItem) => {
         if (!item.image) return null;
@@ -107,9 +101,6 @@ export default function MenuSection({ menuItems }: { menuItems: MenuItem[] }) {
                                         <span>★</span> {badgeLabels[item.badge] || item.badge}
                                     </div>
                                 )}
-                                <div className="mhrt" onClick={(e) => toggleLike(item.id, e)}>
-                                    <span style={{ fontSize: '0.85rem' }}>{liked.includes(item.id) ? '❤️' : '🤍'}</span>
-                                </div>
                             </div>
                             <div className="mbody">
                                 <div className="mcat">{categoryLabels[item.category] || item.category}</div>
@@ -121,12 +112,7 @@ export default function MenuSection({ menuItems }: { menuItems: MenuItem[] }) {
                                             {formatPrice(item.price)}
                                             {item.old_price > 0 && <small>{formatPrice(item.old_price)}</small>}
                                         </div>
-                                        <div className="mstars">
-                                            <span>★</span>
-                                            <span> ({item.reviews})</span>
-                                        </div>
                                     </div>
-                                    <button className="madd" title="Pesan Sekarang">+</button>
                                 </div>
                             </div>
                         </Link>
