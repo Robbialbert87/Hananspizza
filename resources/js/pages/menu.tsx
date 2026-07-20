@@ -128,32 +128,28 @@ export default function Menu({ menuItems }: { menuItems: MenuItem[] }) {
             ? (data.whatsapp_link.startsWith('http') ? data.whatsapp_link : `https://wa.me/${data.whatsapp_link.replace(/[^0-9]/g, '')}`)
             : '';
 
-        const payload = { ...data, whatsapp_link: waLink };
+        setData('whatsapp_link', waLink);
+        setData('image_file', null as any);
 
         if (imageMode === 'upload' && data.image_file instanceof File) {
             const fd = new FormData();
-            fd.append('name', payload.name);
-            fd.append('description', payload.description || '');
-            fd.append('category', payload.category);
-            fd.append('price', String(payload.price));
-            fd.append('old_price', String(payload.old_price));
-            if (payload.badge) fd.append('badge', payload.badge);
-            fd.append('is_active', payload.is_active ? '1' : '0');
-            fd.append('gofood_link', payload.gofood_link || '');
-            fd.append('grabfood_link', payload.grabfood_link || '');
-            fd.append('shopeefood_link', payload.shopeefood_link || '');
-            fd.append('whatsapp_link', payload.whatsapp_link);
+            fd.append('name', data.name);
+            fd.append('description', data.description || '');
+            fd.append('category', data.category);
+            fd.append('price', String(data.price));
+            fd.append('old_price', String(data.old_price));
+            if (data.badge) fd.append('badge', data.badge);
+            fd.append('is_active', data.is_active ? '1' : '0');
+            fd.append('gofood_link', data.gofood_link || '');
+            fd.append('grabfood_link', data.grabfood_link || '');
+            fd.append('shopeefood_link', data.shopeefood_link || '');
+            fd.append('whatsapp_link', waLink);
             fd.append('image', '');
             fd.append('image_file', data.image_file);
             if (editingItem) fd.append('_method', 'put');
-            router.post(url, fd, cb);
+            setTimeout(() => router.post(url, fd, cb), 0);
         } else {
-            setData('image_file', null as any);
-            if (editingItem) {
-                put(`/admin/menu/${editingItem.id}`, { ...payload, whatsapp_link: waLink, _method: undefined }, cb);
-            } else {
-                post('/admin/menu', { ...payload, whatsapp_link: waLink }, cb);
-            }
+            setTimeout(() => (editingItem ? put : post)(url, cb), 0);
         }
     };
 

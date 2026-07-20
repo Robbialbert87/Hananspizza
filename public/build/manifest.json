@@ -389,7 +389,7 @@
     "isEntry": true
   },
   "resources/js/app.tsx": {
-    "file": "assets/app-DpZohzxl.js",
+    "file": "assets/app-ySeWsg0C.js",
     "name": "app",
     "src": "resources/js/app.tsx",
     "isEntry": true,
@@ -627,7 +627,7 @@
     ]
   },
   "resources/js/pages/menu.tsx": {
-    "file": "assets/menu-oBVa1fad.js",
+    "file": "assets/menu-BvG5BrHL.js",
     "name": "menu",
     "src": "resources/js/pages/menu.tsx",
     "isDynamicEntry": true,
