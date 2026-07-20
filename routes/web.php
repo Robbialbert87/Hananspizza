@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\OutletsController;
 use App\Http\Controllers\PromosController;
 use App\Http\Controllers\CustomersController;
 use App\Models\MenuItem;
@@ -13,11 +14,15 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     $menuItems = MenuItem::where('is_active', true)->latest()->get();
-    $promos = Promo::with('menuItem')->where('is_active', true)->latest()->get();
+    $promoMode = \App\Models\Setting::getValue('promo_mode', 'true') === 'true';
+    $promos = $promoMode
+        ? Promo::with('menuItem')->where('is_active', true)->latest()->get()
+        : collect();
 
     return Inertia::render('welcome', [
         'menuItems' => $menuItems,
         'promos' => $promos,
+        'promoMode' => $promoMode,
     ]);
 })->name('home');
 
@@ -30,10 +35,14 @@ Route::get('menu', function () {
 })->name('public.menu');
 
 Route::get('promo', function () {
-    $promos = Promo::with('menuItem')->where('is_active', true)->latest()->get();
+    $promoMode = \App\Models\Setting::getValue('promo_mode', 'true') === 'true';
+    $promos = $promoMode
+        ? Promo::with('menuItem')->where('is_active', true)->latest()->get()
+        : collect();
 
     return Inertia::render('public-promo', [
         'promos' => $promos,
+        'promoMode' => $promoMode,
     ]);
 })->name('public.promo');
 
@@ -42,7 +51,11 @@ Route::get('about', function () {
 })->name('public.about');
 
 Route::get('outlet', function () {
-    return Inertia::render('public-outlet');
+    $outlets = \App\Models\Outlet::where('is_active', true)->latest()->get();
+
+    return Inertia::render('public-outlet', [
+        'outlets' => $outlets,
+    ]);
 })->name('public.outlet');
 
 Route::get('reviews', function () {
@@ -63,6 +76,7 @@ Route::get('faq', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('dashboard/toggle-promo', [DashboardController::class, 'togglePromo'])->name('dashboard.toggle-promo');
 
     Route::get('admin/menu', [MenuController::class, 'index'])->name('menu');
     Route::post('admin/menu', [MenuController::class, 'store'])->name('menu.store');
@@ -73,6 +87,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('admin/categories', [CategoriesController::class, 'store'])->name('categories.store');
     Route::put('admin/categories/{category}', [CategoriesController::class, 'update'])->name('categories.update');
     Route::delete('admin/categories/{category}', [CategoriesController::class, 'destroy'])->name('categories.destroy');
+
+    Route::get('admin/outlets', [OutletsController::class, 'index'])->name('outlets');
+    Route::post('admin/outlets', [OutletsController::class, 'store'])->name('outlets.store');
+    Route::put('admin/outlets/{outlet}', [OutletsController::class, 'update'])->name('outlets.update');
+    Route::delete('admin/outlets/{outlet}', [OutletsController::class, 'destroy'])->name('outlets.destroy');
 
     Route::get('admin/orders', [OrdersController::class, 'index'])->name('orders');
     Route::post('admin/orders', [OrdersController::class, 'store'])->name('orders.store');

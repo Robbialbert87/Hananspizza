@@ -6,6 +6,7 @@ use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\Customer;
 use App\Models\Promo;
+use App\Models\Setting;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -39,6 +40,15 @@ class DashboardController extends Controller
             'recentOrders' => $recentOrders,
             'popularItems' => $popularItems,
             'monthlyRevenue' => $monthlyRevenue,
+            'promoMode' => Setting::getValue('promo_mode', 'true') === 'true',
         ]);
+    }
+
+    public function togglePromo()
+    {
+        $current = Setting::getValue('promo_mode', 'true');
+        Setting::setValue('promo_mode', $current === 'true' ? 'false' : 'true');
+
+        return back()->with('success', 'Promo mode updated successfully.');
     }
 }

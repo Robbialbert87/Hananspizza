@@ -10,6 +10,7 @@ import {
     Users,
     ClipboardList,
     FolderTree,
+    Store,
     ChevronRight,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
@@ -49,6 +50,11 @@ const managementNavItems: NavItem[] = [
         title: 'Categories',
         href: '/admin/categories',
         icon: FolderTree,
+    },
+    {
+        title: 'Outlets',
+        href: '/admin/outlets',
+        icon: Store,
     },
     {
         title: 'Orders',

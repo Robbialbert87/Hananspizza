@@ -2,14 +2,9 @@ import { Head } from '@inertiajs/react';
 import Navbar from '../components/landing/Navbar';
 import Footer from '../components/landing/Footer';
 
-const outlets = [
-    { name: "Hanan's Pizza Sudirman", address: 'Jl. Jend. Sudirman No. 123, Jakarta Selatan', phone: '(021) 5551234', hours: '10:00 - 22:00', map: 'https://maps.google.com' },
-    { name: "Hanan's Pizza Kelapa Gading", address: 'Jl. Boulevard Raya No. 45, Jakarta Utara', phone: '(021) 5555678', hours: '10:00 - 22:00', map: 'https://maps.google.com' },
-    { name: "Hanan's Pizza Bandung", address: 'Jl. Buah Batu No. 78, Bandung', phone: '(022) 5551234', hours: '10:00 - 21:00', map: 'https://maps.google.com' },
-    { name: "Hanan's Pizza Surabaya", address: 'Jl. Pemuda No. 56, Surabaya', phone: '(031) 5551234', hours: '10:00 - 21:00', map: 'https://maps.google.com' },
-];
+interface Outlet { id: number; name: string; address: string; phone: string; hours: string; map_link: string | null; }
 
-export default function PublicOutlet() {
+export default function PublicOutlet({ outlets }: { outlets: Outlet[] }) {
     return (
         <div className="font-['Poppins',sans-serif] text-[#333] leading-relaxed" style={{ background: '#f5f5f5', minHeight: '100vh' }}>
             <Head title="Outlet - Hanan's Pizza" />
@@ -50,7 +45,7 @@ export default function PublicOutlet() {
                                             <span>{outlet.hours}</span>
                                         </div>
                                     </div>
-                                    <a href={outlet.map} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '16px', padding: '10px 20px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', color: '#000', fontWeight: '600', fontSize: '0.85rem', borderRadius: '10px', textDecoration: 'none' }}>
+                                    <a href={outlet.map_link || '#'} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '16px', padding: '10px 20px', background: 'linear-gradient(135deg, #f7a928, #e59a1f)', color: '#000', fontWeight: '600', fontSize: '0.85rem', borderRadius: '10px', textDecoration: 'none' }}>
                                         🗺️ Lihat di Maps
                                     </a>
                                 </div>

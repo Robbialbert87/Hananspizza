@@ -23,7 +23,7 @@ const defaultImage = 'https://images.unsplash.com/photo-1593560708920-61dd98c46a
 
 const formatDate = (date: string) => new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-export default function PublicPromo({ promos }: { promos: Promo[] }) {
+export default function PublicPromo({ promos, promoMode = true }: { promos: Promo[]; promoMode?: boolean }) {
     return (
         <div className="font-['Poppins',sans-serif] text-[#333] leading-relaxed" style={{ background: '#f5f5f5', minHeight: '100vh' }}>
             <Head title="Promo - Hanan's Pizza" />
@@ -39,10 +39,10 @@ export default function PublicPromo({ promos }: { promos: Promo[] }) {
                         <div style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, #f7a928, #e59a1f)', margin: '16px auto 0', borderRadius: '2px' }}></div>
                     </div>
 
-                    {promos.length === 0 ? (
+                    {!promoMode || promos.length === 0 ? (
                         <div style={{ textAlign: 'center', padding: '60px', color: '#888' }}>
                             <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🏷️</div>
-                            Belum ada promo aktif saat ini.
+                            {!promoMode ? 'Saat ini belum ada promo' : 'Belum ada promo aktif saat ini.'}
                         </div>
                     ) : (
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '24px' }}>

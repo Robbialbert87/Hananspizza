@@ -1,5 +1,5 @@
-import { Head } from '@inertiajs/react';
-import { Pizza, ShoppingBag, DollarSign, Users, TrendingUp, Star, ArrowUpRight, Clock, ChefHat, TrendingDown, ClipboardList, Tag, Globe, Settings } from 'lucide-react';
+import { Head, router } from '@inertiajs/react';
+import { Pizza, ShoppingBag, DollarSign, Users, TrendingUp, Star, ArrowUpRight, Clock, ChefHat, TrendingDown, ClipboardList, Tag, Globe, Settings, Megaphone, MegaphoneOff } from 'lucide-react';
 
 const formatPrice = (price: number) => `Rp ${price.toLocaleString('id-ID')}`;
 
@@ -37,9 +37,10 @@ interface DashboardProps {
         rating: number;
         reviews: number;
     }>;
+    promoMode: boolean;
 }
 
-export default function Dashboard({ stats, recentOrders, popularItems }: DashboardProps) {
+export default function Dashboard({ stats, recentOrders, popularItems, promoMode }: DashboardProps) {
     const statCards = [
         { title: 'Total Orders', value: stats.total_orders.toLocaleString(), icon: ShoppingBag, bgColor: 'from-blue-500 to-blue-600', change: '+12.5%', trend: 'up' as const },
         { title: 'Revenue', value: formatPrice(stats.total_revenue), icon: DollarSign, bgColor: 'from-emerald-500 to-emerald-600', change: '+8.2%', trend: 'up' as const },
@@ -88,6 +89,27 @@ export default function Dashboard({ stats, recentOrders, popularItems }: Dashboa
                                 </div>
                             </div>
                         ))}
+                    </div>
+
+                    {/* Promo Mode Toggle */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-8">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${promoMode ? 'bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg shadow-amber-500/25' : 'bg-slate-100'}`}>
+                                    {promoMode ? <Megaphone className="w-6 h-6 text-white" /> : <MegaphoneOff className="w-6 h-6 text-slate-400" />}
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-slate-900">Promo Mode</h3>
+                                    <p className="text-sm text-slate-500">{promoMode ? 'Promo sedang aktif di website' : 'Promo sedang tidak ditampilkan'}</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => router.post('/dashboard/toggle-promo')}
+                                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${promoMode ? 'bg-amber-500' : 'bg-slate-300'}`}
+                            >
+                                <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform ${promoMode ? 'translate-x-6' : 'translate-x-1'}`} />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Main Content Grid */}
